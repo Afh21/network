@@ -1,5 +1,10 @@
 import React, { Component } from "react";
-import { Form, Input, Checkbox, Button } from "antd";
+import { Form, Input, Button } from "antd";
+import axios from "axios";
+import PropTypes from "prop-types";
+
+import { connect } from "react-redux";
+import { registerUser } from "../../actions/authAction";
 
 const FormItem = Form.Item;
 
@@ -12,7 +17,7 @@ class Register extends Component {
       email: "",
       password: "",
       password2: "",
-      error: {}
+      errors: {}
     };
 
     this.onChange = this.onChange.bind(this);
@@ -29,7 +34,14 @@ class Register extends Component {
       password2: this.state.password2
     };
 
-    console.log(newUser);
+    // Action RegisterUser
+    this.props.registerUser(newUser);
+
+    /*axios
+      .post("/api/users/register", newUser)
+      .then(res => console.log(res.data))
+      .catch(err => this.setState({ errors: err.response.data }));
+      */
   };
 
   onChange(e) {
@@ -38,6 +50,9 @@ class Register extends Component {
 
   render() {
     const { name, email, password, password2 } = this.state;
+
+    // Esto viene del mapStateToProps
+    const { user } = this.props.auth;
 
     const formItemLayout = {
       labelCol: {
@@ -72,6 +87,7 @@ class Register extends Component {
     return (
       <div className="indexRegister">
         <div className="title">
+          {user ? user.name : "Cabron"}
           <h3 className="center"> Formulario de Registro </h3>
         </div>
 
@@ -104,12 +120,6 @@ class Register extends Component {
           </FormItem>
 
           <FormItem {...tailFormItemLayout}>
-            <Checkbox>
-              I have read the <a href="">agreement</a>
-            </Checkbox>
-          </FormItem>
-
-          <FormItem {...tailFormItemLayout}>
             <Button type="primary" htmlType="submit">
               Registrarse
             </Button>
@@ -120,6 +130,16 @@ class Register extends Component {
   }
 }
 
-// const WrappedRegistrationForm = Form.create()(Register);
+Register.PropTypes = {
+  registerUser: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired
+};
 
-export default Register;
+const mapStateToProps = state => ({
+  auth: state.auth
+});
+
+export default connect(
+  mapStateToProps,
+  { registerUser }
+)(Register);
