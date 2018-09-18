@@ -1,11 +1,23 @@
 import React, { Component } from "react";
 import { Menu, Button } from "antd";
 import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+
+import { withRouter } from "react-router-dom";
+import { logoutUser } from "../../actions/authAction";
 
 class Navbar extends Component {
   state = {
-    current: "login"
+    current: "home"
   };
+
+  onLogoutClick(e) {
+    e.preventDefault();
+
+    // Call to function to action redux
+    this.props.logoutUser(this.props.history);
+  }
 
   handleClick = e => {
     console.log("click ", e);
@@ -15,7 +27,36 @@ class Navbar extends Component {
   };
 
   render() {
-    return (
+    const { isAuthenticated, user } = this.props.auth;
+
+    const authLinks = (
+      <div>
+        <Menu
+          onClick={this.handleClick}
+          selectedKeys={[this.state.current]}
+          mode="horizontal"
+        >
+          <Menu.Item key="home">
+            <Button type="dashed" ghost>
+              <Link to="/">Home</Link>
+            </Button>
+          </Menu.Item>
+
+          <Menu.Item key="logout">
+            <Button
+              type="primary"
+              ghost
+              onClick={this.onLogoutClick.bind(this)}
+            >
+              {" "}
+              Cerrar Sesión
+            </Button>
+          </Menu.Item>
+        </Menu>
+      </div>
+    );
+
+    const guessLinks = (
       <div>
         <Menu
           onClick={this.handleClick}
@@ -42,7 +83,21 @@ class Navbar extends Component {
         </Menu>
       </div>
     );
+
+    return <div> {isAuthenticated ? authLinks : guessLinks}</div>;
   }
 }
 
-export default Navbar;
+Navbar.propTypes = {
+  logoutUser: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+  auth: state.auth
+});
+
+export default connect(
+  mapStateToProps,
+  { logoutUser }
+)(withRouter(Navbar));

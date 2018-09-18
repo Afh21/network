@@ -1,5 +1,11 @@
 import React, { Component } from "react";
 import { Form, Input, Button } from "antd";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { loginUser } from "../../actions/authAction";
+
+// Esto es para evaluar una condicion y establecer una clase css
+// import classnames from "classnames";
 
 const FormItem = Form.Item;
 
@@ -10,7 +16,7 @@ class Login extends Component {
     this.state = {
       email: "",
       password: "",
-      error: {}
+      errors: {}
     };
 
     this.onChange = this.onChange.bind(this);
@@ -20,13 +26,30 @@ class Login extends Component {
   onSubmit = e => {
     e.preventDefault();
 
-    const user = {
+    const userData = {
       email: this.state.email,
       password: this.state.password
     };
 
-    console.log(user);
+    // Call action redux
+    this.props.loginUser(userData);
   };
+
+  componentDidMount() {
+    if (this.props.auth.isAuthenticated) {
+      this.props.history.push("/dashbaord");
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.auth.isAuthenticated) {
+      this.props.history.push("/dashboard");
+    }
+
+    if (nextProps.errors) {
+      this.setState({ errors: nextProps.errors });
+    }
+  }
 
   onChange(e) {
     this.setState({ [e.target.id]: e.target.value });
@@ -65,6 +88,8 @@ class Login extends Component {
       }
     };
 
+    // const { errors } = this.state;
+
     return (
       <div className="indexRegister">
         <div className="title">
@@ -97,5 +122,18 @@ class Login extends Component {
 }
 
 // const WrappedRegistrationForm = Form.create()(Register);
+Login.propTypes = {
+  loginUser: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired
+};
 
-export default Login;
+const mapStateToProps = state => ({
+  auth: state.auth,
+  errors: state.errors
+});
+
+export default connect(
+  mapStateToProps,
+  { loginUser }
+)(Login);

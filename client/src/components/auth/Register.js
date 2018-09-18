@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Form, Input, Button } from "antd";
-import axios from "axios";
 import PropTypes from "prop-types";
+import { withRouter } from "react-router-dom";
 
 import { connect } from "react-redux";
 import { registerUser } from "../../actions/authAction";
@@ -35,24 +35,37 @@ class Register extends Component {
     };
 
     // Action RegisterUser
-    this.props.registerUser(newUser);
+    this.props.registerUser(newUser, this.props.history);
 
-    /*axios
-      .post("/api/users/register", newUser)
-      .then(res => console.log(res.data))
-      .catch(err => this.setState({ errors: err.response.data }));
+    /*
       */
   };
 
+  componentDidMount() {
+    if (this.props.auth.isAuthenticated) {
+      this.props.history.push("/dashbaord");
+    }
+  }
+
+  // Lifecycle
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.errors) {
+      this.setState({ errors: nextProps.errors });
+    }
+  }
+
+  // Lifecycle
   onChange(e) {
     this.setState({ [e.target.id]: e.target.value });
   }
 
+  // Lifecycle
   render() {
     const { name, email, password, password2 } = this.state;
 
     // Esto viene del mapStateToProps
-    const { user } = this.props.auth;
+    // const { user } = this.props.auth;
+    const { errors } = this.state;
 
     const formItemLayout = {
       labelCol: {
@@ -87,7 +100,7 @@ class Register extends Component {
     return (
       <div className="indexRegister">
         <div className="title">
-          {user ? user.name : "Cabron"}
+          {errors.name && <div>{errors.name} </div>}
           <h3 className="center"> Formulario de Registro </h3>
         </div>
 
@@ -130,16 +143,18 @@ class Register extends Component {
   }
 }
 
-Register.PropTypes = {
+Register.propTypes = {
   registerUser: PropTypes.func.isRequired,
-  auth: PropTypes.object.isRequired
+  auth: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-  auth: state.auth
+  auth: state.auth,
+  errors: state.errors
 });
 
 export default connect(
   mapStateToProps,
   { registerUser }
-)(Register);
+)(withRouter(Register));
