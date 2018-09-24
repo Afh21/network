@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Form, Input, Button } from "antd";
+import { Form, Input, Button, Icon } from "antd";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { loginUser } from "../../actions/authAction";
@@ -98,11 +98,17 @@ class Login extends Component {
 
         <Form onSubmit={this.onSubmit}>
           <FormItem {...formItemLayout} label="E-mail">
-            <Input id="email" defaultValue={email} onChange={this.onChange} />
+            <Input
+              prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
+              id="email"
+              defaultValue={email}
+              onChange={this.onChange}
+            />
           </FormItem>
 
           <FormItem {...formItemLayout} label="Password">
             <Input
+              prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
               id="password"
               type="password"
               defaultValue={password}

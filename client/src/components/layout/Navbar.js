@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 
 import { withRouter } from "react-router-dom";
 import { logoutUser } from "../../actions/authAction";
+import { clearCurrentProfile } from "../../actions/profileAction";
 
 class Navbar extends Component {
   state = {
@@ -16,7 +17,10 @@ class Navbar extends Component {
     e.preventDefault();
 
     // Call to function to action redux
-    this.props.logoutUser(this.props.history);
+    this.props.logoutUser();
+
+    // Set clearCurrentProfile
+    this.props.clearCurrentProfile();
   }
 
   handleClick = e => {
@@ -27,7 +31,7 @@ class Navbar extends Component {
   };
 
   render() {
-    const { isAuthenticated, user } = this.props.auth;
+    const { isAuthenticated } = this.props.auth;
 
     const authLinks = (
       <div>
@@ -90,6 +94,7 @@ class Navbar extends Component {
 
 Navbar.propTypes = {
   logoutUser: PropTypes.func.isRequired,
+  clearCurrentProfile: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired
 };
 
@@ -99,5 +104,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { logoutUser }
+  { logoutUser, clearCurrentProfile }
 )(withRouter(Navbar));
