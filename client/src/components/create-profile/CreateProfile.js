@@ -1,8 +1,20 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { createProfile } from "../../actions/profileAction";
+import { withRouter } from "react-router-dom";
 
-import { Form, Input, Select, Divider, Row, Col, Button, Switch } from "antd";
+import {
+  Form,
+  Input,
+  Select,
+  Divider,
+  Row,
+  Col,
+  Button,
+  Switch,
+  Icon
+} from "antd";
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -41,6 +53,12 @@ class CreateProfile extends Component {
     this.setState({ status: value });
   };
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.errors) {
+      this.setState({ errors: nextProps.errors });
+    }
+  }
+
   onSubmit(e) {
     e.preventDefault();
 
@@ -54,6 +72,8 @@ class CreateProfile extends Component {
       githubusername: this.state.githubusername,
       bio: this.state.bio
     };
+
+    this.createProfile(profile);
     console.log(profile);
   }
 
@@ -93,14 +113,15 @@ class CreateProfile extends Component {
     const { TextArea } = Input;
     let socialInputs;
 
-    console.log("Ey", displaySocialInputs);
-
     if (displaySocialInputs) {
       socialInputs = (
         <div>
           <FormItem {...formItemLayout} label=" Twitter">
             <Input
               id="twitter"
+              prefix={
+                <Icon type="twitter" style={{ color: "rgba(0,0,0,.25)" }} />
+              }
               name="twitter"
               placeholder=" Do u have twitter?"
               onChange={this.onChange}
@@ -111,6 +132,9 @@ class CreateProfile extends Component {
           <FormItem {...formItemLayout} label=" Facebook">
             <Input
               id="facebook"
+              prefix={
+                <Icon type="facebook" style={{ color: "rgba(0,0,0,.25)" }} />
+              }
               name="facebook"
               placeholder=" Do u have Facebook?"
               onChange={this.onChange}
@@ -121,6 +145,9 @@ class CreateProfile extends Component {
           <FormItem {...formItemLayout} label=" Linkedin">
             <Input
               id="linkedin"
+              prefix={
+                <Icon type="linkedin" style={{ color: "rgba(0,0,0,.25)" }} />
+              }
               name="linkedin"
               placeholder=" Do u have Linkedin?"
               onChange={this.onChange}
@@ -131,6 +158,9 @@ class CreateProfile extends Component {
           <FormItem {...formItemLayout} label=" Youtube">
             <Input
               id="youtube"
+              prefix={
+                <Icon type="youtube" style={{ color: "rgba(0,0,0,.25)" }} />
+              }
               name="youtube"
               placeholder=" Do u have Youtube?"
               onChange={this.onChange}
@@ -141,6 +171,9 @@ class CreateProfile extends Component {
           <FormItem {...formItemLayout} label=" Instagram">
             <Input
               id="instagram"
+              prefix={
+                <Icon type="instagram" style={{ color: "rgba(0,0,0,.25)" }} />
+              }
               name="instagram"
               placeholder=" Do u have Instagram?"
               onChange={this.onChange}
@@ -164,6 +197,9 @@ class CreateProfile extends Component {
               <FormItem {...formItemLayout} label=" ** Nick">
                 <Input
                   id="handle"
+                  prefix={
+                    <Icon type="key" style={{ color: "rgba(0,0,0,.25)" }} />
+                  }
                   name="handle"
                   placeholder="What Nickname do you want?"
                   onChange={this.onChange}
@@ -174,6 +210,12 @@ class CreateProfile extends Component {
               <FormItem {...formItemLayout} label=" ** Profession">
                 <Select
                   id="status"
+                  prefix={
+                    <Icon
+                      type="safety-certificate"
+                      style={{ color: "rgba(0,0,0,.25)" }}
+                    />
+                  }
                   name={status}
                   defaultValue="0"
                   onChange={this.handleStatus}
@@ -199,6 +241,9 @@ class CreateProfile extends Component {
               <FormItem {...formItemLayout} label=" ** Company">
                 <Input
                   id="company"
+                  prefix={
+                    <Icon type="cluster" style={{ color: "rgba(0,0,0,.25)" }} />
+                  }
                   name="company"
                   placeholder="What's your company?"
                   onChange={this.onChange}
@@ -209,6 +254,9 @@ class CreateProfile extends Component {
               <FormItem {...formItemLayout} label=" Website">
                 <Input
                   id="website"
+                  prefix={
+                    <Icon type="global" style={{ color: "rgba(0,0,0,.25)" }} />
+                  }
                   name="website"
                   placeholder="Do you have a website?"
                   onChange={this.onChange}
@@ -219,6 +267,12 @@ class CreateProfile extends Component {
               <FormItem {...formItemLayout} label="** Skills">
                 <Input
                   id="skills"
+                  prefix={
+                    <Icon
+                      type="thunderbolt"
+                      style={{ color: "rgba(0,0,0,.25)" }}
+                    />
+                  }
                   name="skills"
                   placeholder="Whats are your skills?"
                   onChange={this.onChange}
@@ -229,6 +283,12 @@ class CreateProfile extends Component {
               <FormItem {...formItemLayout} label="** Location">
                 <Input
                   id="location"
+                  prefix={
+                    <Icon
+                      type="environment"
+                      style={{ color: "rgba(0,0,0,.25)" }}
+                    />
+                  }
                   name="location"
                   placeholder="Where do u work?"
                   onChange={this.onChange}
@@ -239,6 +299,9 @@ class CreateProfile extends Component {
               <FormItem {...formItemLayout} label="** Github Username">
                 <Input
                   id="githubusername"
+                  prefix={
+                    <Icon type="github" style={{ color: "rgba(0,0,0,.25)" }} />
+                  }
                   name="githubusername"
                   placeholder="Do u have github?"
                   onChange={this.onChange}
@@ -249,6 +312,12 @@ class CreateProfile extends Component {
               <FormItem {...formItemLayout} label=" Biographic">
                 <TextArea
                   id="bio"
+                  prefix={
+                    <Icon
+                      type="solution"
+                      style={{ color: "rgba(0,0,0,.25)" }}
+                    />
+                  }
                   name="bio"
                   placeholder=" Write some brief of you."
                   onChange={this.onChange}
@@ -291,4 +360,11 @@ const mapStateToProps = state => ({
   errors: state.errors
 });
 
-export default connect(mapStateToProps)(CreateProfile);
+export default withRouter(
+  connect(
+    mapStateToProps,
+    { createProfile }
+  )(CreateProfile)
+);
+
+// Video 52 - Fin
