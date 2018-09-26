@@ -10,6 +10,7 @@ import Login from "./components/auth/Login.js";
 import Register from "./components/auth/Register.js";
 import Dashboard from "./components/dashboard/Dashboard";
 import CreateProfile from "./components/create-profile/CreateProfile";
+import EditProfile from "./components/edit-profile/EditProfile";
 import PrivateRoute from "./components/common/PrivateRoute.js";
 
 import jwt_decode from "jwt-decode";
@@ -61,8 +62,15 @@ class App extends Component {
             <Switch>
               <PrivateRoute
                 exact
-                path="/dashboard/create-profile"
+                path="/dashboard/profile/create-profile"
                 component={CreateProfile}
+              />
+            </Switch>
+            <Switch>
+              <PrivateRoute
+                exact
+                path="/dashboard/profile/edit-profile"
+                component={EditProfile}
               />
             </Switch>
             <Footer />

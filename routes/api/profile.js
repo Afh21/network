@@ -111,7 +111,7 @@ router.post(
     // Check Validation
     if (!isValid) {
       //Return any errors
-      return res.status(400).json(errors);
+      return res.status(400).json({ anyErrors: errors, message: "Stop here!" });
     }
 
     // Get fields
@@ -144,32 +144,42 @@ router.post(
     if (req.body.linkedin) profileFields.social.linkedin = req.body.linkedin;
     if (req.body.instagram) profileFields.social.instagram = req.body.instagram;
 
-    profile.findOne({ user: req.user.id }).then(profilex => {
-      if (profilex) {
-        // Update
-        profile
-          .findOneAndUpdate(
-            { user: req.user.id },
-            { $set: profileFields },
-            { new: true }
-          )
-          .populate("user")
-          .then(profile => res.json(profile));
-      } else {
-        // Create
+    profile
+      .findOne({ user: req.user.id })
+      .then(profileXt => {
+        if (profileXt) {
+          // Update
+          profile
+            .findOneAndUpdate(
+              { user: req.user.id },
+              { $set: profileFields },
+              { new: true }
+            )
+            .populate("user")
+            .then(profile => res.json({ data: profile }))
+            .catch(err =>
+              res
+                .status(400)
+                .json({ error: err, message: "Problem en findOne()" })
+            );
+        } else {
+          // Create
 
-        // Check if handle exists
-        profile.findOne({ handle: profileFields.handle }).then(profile => {
-          if (profile) {
-            errors.handle = " That handle already exists";
-            res.status(400).json(errors);
-          }
-        });
+          // Check if handle exists
+          profile.findOne({ handle: profileFields.handle }).then(profile => {
+            if (profile) {
+              errors.handle = " That handle already exists";
+              res.status(400).json(errors);
+            }
+          });
 
-        // Save profile
-        new profile(profileFields).save().then(profile => res.json(profile));
-      }
-    });
+          // Save profile
+          new profile(profileFields).save().then(profile => res.json(profile));
+        }
+      })
+      .catch(err =>
+        res.status(500).json({ message: "Error in finByID create :( " })
+      );
   }
 );
 
@@ -311,5 +321,3 @@ router.delete(
 );
 
 module.exports = router;
-
-// Video 24 begin

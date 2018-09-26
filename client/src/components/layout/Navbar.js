@@ -24,7 +24,6 @@ class Navbar extends Component {
   }
 
   handleClick = e => {
-    console.log("click ", e);
     this.setState({
       current: e.key
     });
@@ -42,7 +41,7 @@ class Navbar extends Component {
         >
           <Menu.Item key="home">
             <Button type="dashed" ghost>
-              <Link to="/">Home</Link>
+              <Link to="/dashboard">Home</Link>
             </Button>
           </Menu.Item>
 

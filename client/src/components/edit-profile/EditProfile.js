@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { createProfile } from "../../actions/profileAction";
+import { createProfile, getCurrentProfile } from "../../actions/profileAction";
 import { withRouter } from "react-router-dom";
+import isEmpty from "../../validation/is-empty";
 
 import {
   Form,
@@ -52,12 +53,63 @@ class CreateProfile extends Component {
     this.setState({ status: value });
   };
 
-  /*
+  // Lifecycle
+  componentDidMount = () => {
+    this.props.getCurrentProfile();
+  };
+
   componentWillReceiveProps(nextProps) {
-    if (nextProps.errors) {
-      this.setState({ errors: nextProps.errors });
+    if (nextProps.profile.profile) {
+      const profile = nextProps.profile.profile;
+
+      //  Bring  skills array back to CSV
+      const skillsCSV = profile.skills.join(",");
+
+      // If profile field doesn't exists, make empty string
+      profile.company = !isEmpty(profile.company) ? profile.company : "";
+      profile.status = !isEmpty(profile.status) ? profile.status : "";
+      profile.website = !isEmpty(profile.website) ? profile.website : "";
+      profile.location = !isEmpty(profile.location) ? profile.location : "";
+      profile.githubusername = !isEmpty(profile.githubusername)
+        ? profile.githubusername
+        : "";
+      profile.bio = !isEmpty(profile.bio) ? profile.bio : "";
+
+      profile.social = !isEmpty(profile.social) ? profile.social : {};
+      profile.twitter = !isEmpty(profile.social.twitter)
+        ? profile.social.twitter
+        : "";
+      profile.facebook = !isEmpty(profile.social.facebook)
+        ? profile.social.facebook
+        : "";
+      profile.linkedin = !isEmpty(profile.social.linkedin)
+        ? profile.social.linkedin
+        : "";
+      profile.youtube = !isEmpty(profile.social.youtube)
+        ? profile.social.youtube
+        : "";
+      profile.instagram = !isEmpty(profile.social.instagram)
+        ? profile.social.instagram
+        : "";
+
+      // Set component fields state
+      this.setState({
+        handle: profile.handle,
+        company: profile.company,
+        status: profile.status,
+        website: profile.website,
+        location: profile.location,
+        skills: profile.skills,
+        githubusername: profile.githubusername,
+        bio: profile.bio,
+        twitter: profile.twitter,
+        facebook: profile.facebook,
+        linkedin: profile.linkedin,
+        youtube: profile.youtube,
+        instagram: profile.instagram
+      });
     }
-  }*/
+  }
 
   onSubmit(e) {
     e.preventDefault();
@@ -192,10 +244,9 @@ class CreateProfile extends Component {
       <div>
         <Row align="center">
           <Col lg={{ span: 12, push: 7 }}>
-            <Divider orientation="left">Create Profile</Divider>
+            <Divider orientation="left">Edit Profile</Divider>
             <p style={{ marginBottom: "5em" }}>
-              Please, let's us know u adding some information in this part. Ok.
-              Thanks
+              It's your profile. Change anything when you wish.
             </p>
             <Form onSubmit={this.onSubmit}>
               <FormItem {...formItemLayout} label=" ** Nick">
@@ -220,8 +271,8 @@ class CreateProfile extends Component {
                       style={{ color: "rgba(0,0,0,.25)" }}
                     />
                   }
-                  name={status}
-                  defaultValue="0"
+                  name="status"
+                  defaultValue={status}
                   onChange={this.handleStatus}
                 >
                   <Option value="0">*Select professional status</Option>
@@ -242,7 +293,7 @@ class CreateProfile extends Component {
                 </Select>
               </FormItem>
 
-              <FormItem {...formItemLayout} label=" ** Company">
+              <FormItem {...formItemLayout} label=" Company">
                 <Input
                   id="company"
                   prefix={
@@ -284,7 +335,7 @@ class CreateProfile extends Component {
                 />
               </FormItem>
 
-              <FormItem {...formItemLayout} label="** Location">
+              <FormItem {...formItemLayout} label="Location">
                 <Input
                   id="location"
                   prefix={
@@ -300,7 +351,7 @@ class CreateProfile extends Component {
                 />
               </FormItem>
 
-              <FormItem {...formItemLayout} label="** Github Username">
+              <FormItem {...formItemLayout} label="Github Username">
                 <Input
                   id="githubusername"
                   prefix={
@@ -354,7 +405,8 @@ class CreateProfile extends Component {
 
 CreateProfile.propTypes = {
   profile: PropTypes.object.isRequired,
-  createProfile: PropTypes.func.isRequired
+  createProfile: PropTypes.func.isRequired,
+  getCurrentProfile: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -363,5 +415,7 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { createProfile }
+  { createProfile, getCurrentProfile }
 )(withRouter(CreateProfile));
+
+// Video 55 - Begin
