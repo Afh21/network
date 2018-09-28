@@ -12,7 +12,8 @@ module.exports = function validateProfileInput(data) {
     errors.handle = "Handle needs to between 2 and 40 characters";
   }
 
-  if (Validator.isLength(data.handle)) {
+  // Validator.isLength() -> Antes estaba así.
+  if (isEmpty(data.handle)) {
     errors.handle = "Profile handle is required";
   }
 

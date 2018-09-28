@@ -146,8 +146,8 @@ router.post(
 
     profile
       .findOne({ user: req.user.id })
-      .then(profileXt => {
-        if (profileXt) {
+      .then(profileX => {
+        if (profileX) {
           // Update
           profile
             .findOneAndUpdate(

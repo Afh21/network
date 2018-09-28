@@ -62,12 +62,15 @@ class CreateProfile extends Component {
     if (nextProps.profile.profile) {
       const profile = nextProps.profile.profile;
 
+      console.log("componentWillRecibeProps: ", profile);
+
       //  Bring  skills array back to CSV
-      const skillsCSV = profile.skills.join(",");
+      profile.skills = profile.skills.join(",");
 
       // If profile field doesn't exists, make empty string
+      profile.handle = !isEmpty(profile.handle) ? String(profile.handle) : "";
       profile.company = !isEmpty(profile.company) ? profile.company : "";
-      profile.status = !isEmpty(profile.status) ? profile.status : "";
+      profile.status = !isEmpty(profile.status) ? String(profile.status) : "";
       profile.website = !isEmpty(profile.website) ? profile.website : "";
       profile.location = !isEmpty(profile.location) ? profile.location : "";
       profile.githubusername = !isEmpty(profile.githubusername)
@@ -132,6 +135,9 @@ class CreateProfile extends Component {
 
     // Use an action of profileActions
     this.props.createProfile(profile, this.props.history);
+    console.log("onSubmit", profile);
+
+    // validator.js == typeof profile.handle === "string" || profile.handle instanceof String
   }
 
   handleStateSwitch = checked => {
@@ -152,7 +158,6 @@ class CreateProfile extends Component {
     const {
       displaySocialInputs,
       handle,
-      status,
       company,
       website,
       location,
@@ -272,7 +277,6 @@ class CreateProfile extends Component {
                     />
                   }
                   name="status"
-                  defaultValue={status}
                   onChange={this.handleStatus}
                 >
                   <Option value="0">*Select professional status</Option>
@@ -417,5 +421,3 @@ export default connect(
   mapStateToProps,
   { createProfile, getCurrentProfile }
 )(withRouter(CreateProfile));
-
-// Video 55 - Begin
