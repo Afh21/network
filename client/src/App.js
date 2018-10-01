@@ -12,6 +12,8 @@ import Dashboard from "./components/dashboard/Dashboard";
 import CreateProfile from "./components/create-profile/CreateProfile";
 import EditProfile from "./components/edit-profile/EditProfile";
 import AddExperience from "./components/add-credentials/AddExperience";
+import AddEducation from "./components/add-credentials/AddEducation";
+import Profiles from "./components/profiles/Profiles";
 import PrivateRoute from "./components/common/PrivateRoute.js";
 
 import jwt_decode from "jwt-decode";
@@ -57,6 +59,7 @@ class App extends Component {
             <Route exact path="/" component={Landing} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/register" component={Register} />
+            <Route exact path="/profiles" component={Profiles} />
             <Switch>
               <PrivateRoute exact path="/dashboard" component={Dashboard} />
             </Switch>
@@ -79,6 +82,13 @@ class App extends Component {
                 exact
                 path="/dashboard/profile/add-experience"
                 component={AddExperience}
+              />
+            </Switch>
+            <Switch>
+              <PrivateRoute
+                exact
+                path="/dashboard/profile/add-education"
+                component={AddEducation}
               />
             </Switch>
             <Footer />

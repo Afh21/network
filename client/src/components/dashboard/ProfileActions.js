@@ -16,7 +16,7 @@ const ProfileActions = () => {
           <Button icon="bars">Add Experience</Button>
         </Link>
 
-        <Link to={`/dashboard/profile/add-experience/`}>
+        <Link to={`/dashboard/profile/add-education/`}>
           <Button icon="book">Add Education</Button>
         </Link>
       </ButtonGroup>

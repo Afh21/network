@@ -6,6 +6,9 @@ import { Spin, Button, Tooltip } from "antd";
 import { Link } from "react-router-dom";
 import ProfileActions from "./ProfileActions";
 
+import Experience from "./Experience";
+import Education from "./Education";
+
 class Dashboard extends Component {
   componentDidMount() {
     this.props.getCurrentProfile();
@@ -31,10 +34,13 @@ class Dashboard extends Component {
             <Tooltip placement="left" title={`Profile ${user.name}`}>
               Welcome <Link to={`/profile/${profile.handle}`}>{user.name}</Link>
             </Tooltip>
-
             {/* Buttons of actionProfile*/}
             <ProfileActions />
-
+            <br />
+            {/* Experience */}
+            <Experience experience={profile.experience} />
+            <Education education={profile.education} />
+            <br />
             {/* Button delete account */}
             <Button
               icon="warning"
@@ -44,6 +50,7 @@ class Dashboard extends Component {
             >
               Delete Account
             </Button>
+            <br /> <br />
           </div>
         );
       } else {
