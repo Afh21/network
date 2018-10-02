@@ -18,9 +18,9 @@ class Profiles extends Component {
       profileItems = <Spin size="large"> </Spin>;
     } else {
       if (profiles.length > 0) {
-        <br />;
-        profileItems = <h3> Profiles Interesting here! </h3>;
-        <br />;
+        profileItems = profiles.map(profile => (
+          <ProfileItem key={profile._id} profile={profile} />
+        ));
       } else {
         profileItems = <h3> No profiles found ... </h3>;
       }

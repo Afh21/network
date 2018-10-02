@@ -45,6 +45,12 @@ class Navbar extends Component {
             </Button>
           </Menu.Item>
 
+          <Menu.Item key="profiles">
+            <Button type="danger" ghost>
+              <Link to="/profiles">profiles</Link>
+            </Button>
+          </Menu.Item>
+
           <Menu.Item key="logout">
             <Button
               type="primary"

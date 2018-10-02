@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { Table, Button, Tag, Divider } from "antd";
+import { Table, Button, Tag } from "antd";
 import Moment from "react-moment";
 import { deleteExperience } from "../../actions/profileAction";
 
