@@ -26,3 +26,8 @@ body {
 .profileItems {
   margin: 2em 1em;
 }
+
+.listHeader {
+  font-size: 14px;
+  font-weight: 100;
+}
