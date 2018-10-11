@@ -15,6 +15,8 @@ import AddExperience from "./components/add-credentials/AddExperience";
 import AddEducation from "./components/add-credentials/AddEducation";
 import Profiles from "./components/profiles/Profiles";
 import Profile from "./components/profile/Profile";
+import Posts from "./components/post/Posts";
+import Post from "./components/post/Post";
 import PrivateRoute from "./components/common/PrivateRoute.js";
 
 import jwt_decode from "jwt-decode";
@@ -23,6 +25,7 @@ import { setCurrentUser, logoutUser } from "./actions/authAction";
 import { clearCurrentProfile } from "./actions/profileAction";
 import { Provider } from "react-redux";
 import store from "./store";
+import NotFound from "./components/NoFound/NotFound";
 
 // Check for token
 if (localStorage.jwtToken) {
@@ -93,6 +96,13 @@ class App extends Component {
                 component={AddEducation}
               />
             </Switch>
+            <Switch>
+              <PrivateRoute exact path="/dashboard/posts" component={Posts} />
+            </Switch>
+            <Switch>
+              <PrivateRoute exact path="/dashboard/post/:id" component={Post} />
+            </Switch>
+            <Route exact path="/not-found" component={NotFound} />
             <Footer />
           </div>
         </Router>

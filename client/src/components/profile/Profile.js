@@ -8,14 +8,19 @@ import ProfileHeader from "./ProfileHeader";
 import ProfileAbout from "./ProfileAbout";
 import ProfileCreds from "./ProfileCreds";
 import ProfileGithub from "./ProfileGithub";
-import { Spin, Row, Col, Card } from "antd";
-import { Button } from "antd/lib/radio";
+import { Spin, Row, Col, Card, Button } from "antd";
 
 class Profile extends Component {
   componentDidMount() {
     // Capture params by Route. Awesome
     if (this.props.match.params.handle) {
       this.props.getProfileByHandle(this.props.match.params.handle);
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.profile.profile === null && this.props.profile.loading) {
+      this.props.history.push("/not-found");
     }
   }
 
@@ -54,7 +59,9 @@ class Profile extends Component {
               </Card>
 
               <Card type="inner" title="Links Github">
-                <ProfileGithub profile={profile} />
+                {profile.githubusername ? (
+                  <ProfileGithub username={profile.githubusername} />
+                ) : null}
               </Card>
             </Card>
           </Col>
